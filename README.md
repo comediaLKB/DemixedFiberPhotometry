@@ -1,5 +1,6 @@
 # Demixing fluorescence time traces transmitted by multimode fibers (Python)
-NMF analysis for Demixed Fiber Photometry
+- NMF analysis for Demixed Fiber Photometry
+-  [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.12125030.svg)](https://doi.org/10.5281/zenodo.12125030)
 
 Python codes for the Non-negative Matrix Factorization (NMF) results shown in: **C. V. Rimoli, C. Moretti, F. Soldevila, E. Bremont, C. Ventalon, and S. Gigan - 2024 - Demixing fluorescence time traces transmitted by multimode fibers** arXiv:2306.00695 [physics.optics] https://doi.org/10.48550/arXiv.2306.00695
 
@@ -18,3 +19,5 @@ Python codes (modules):
 Check also:
 https://github.com/rimoliCV ;
 https://github.com/cbasedlf/optsim
+
+
