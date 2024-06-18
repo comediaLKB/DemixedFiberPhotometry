@@ -19,7 +19,7 @@ Python codes (modules):
 (4) **tools_NMF.py** *Description:* Some plotting and image display tools written by Fernando SOLDEVILA that is used in (1) and (3).
 
 Check also:
-https://github.com/rimoliCV ;
-https://github.com/cbasedlf/optsim
+-  @RimoliCV https://github.com/rimoliCV ;
+-  @cdbaself https://github.com/cbasedlf/optsim .
 
 
