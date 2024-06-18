@@ -13,7 +13,7 @@ Python codes (modules):
 **(3) NMF_example.py** *Description:* Toy code (a simple example) of NMF analysis written by Fernando SOLDEVILA used for fluorescence speckle demixing (fully evolved speckle/scattering pattern) 
 - Input files: *(i) raw_ensemble_video_data.mat ; (ii) ground_truth_patterns_traces_gt.mat ; (iii) tools_NMF.py .*
 
-(4) **tools_NMF.py** *Description:* Some plotting and image display tools written by Fernando SOLDEVILA used in (1) and (3).
+(4) **tools_NMF.py** *Description:* Some plotting and image display tools written by Fernando SOLDEVILA that is used in (1) and (3).
 
 Check also:
 https://github.com/rimoliCV ;
