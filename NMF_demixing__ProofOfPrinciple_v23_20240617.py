@@ -4,8 +4,8 @@ ModulePy = str('NMF_demixing__ProofOfPrinciple_v23_20240617.py')
 '''
 Description: NMF analysis demixing spatio-temporal ensemble signals from Fiber Photometry ensemble video data (proof-of-principle analysis).
 - Input files: 
-(i) raw_ensemble_video_data.mat                      [videodata_ddmmyyyy_001.mat]
-(ii) ground_truth_patterns_traces_gt.mat             [videodata_ddmmyyyy_001_gt.mat]
+(i) raw_ensemble_video_data.mat                      [data_ddmmyyyy_001.mat]
+(ii) ground_truth_patterns_traces_gt.mat             [data_ddmmyyyy_001_gt.mat]
 (iii) NMF_demixing__Sample_Strings.py [here you must open this file and edit the text by adding the location of the input .mat files]
 (iv) tools_NMF.py 
 
@@ -92,13 +92,13 @@ if do_saving is True:       # Here we choose where to save the NMF proof of prin
 if make_rank_sameas_numbeads is False:       # Here we chose if thoe NMF rank is exactly the number of the sources (numbeads)
     other_rank = 7     # if "add_BGD_to_rank = True" , then rank = other_rank + 1  
     
-if remove_initial_frames is True:            # Here we choose if we want to remove some video frames from the NMF analysis
-    first_frames = 50
+if remove_initial_frames is True:            # Here we choose if we want to remove some video frames from the NMF analysis  
+    first_frames = 50                        # For example, if at the beginning of the experiment with DMD, there was room light affecting the acquisition
 else:
     first_frames = 0
 
 if remove_single_frame is True:             # Here we choose if we want to remove a single frame from the video
-    frame_to_delete = 618
+    frame_to_delete = 618                   # For example, if at the beginning of the experiment with DMD, there was room light affecting the acquisition
 
 if norm_factor is True:     # Here if we want to normalize the NMF traces to visually compare with GT traces
     norm_factor=0.632       # this was a test to normalize the time traces with a different value (visual display)
@@ -147,7 +147,7 @@ if remove_single_frame is True:
     
 # Normalize ground truth traces (for doing comparisons later) - needs to have the same length to compare
 act_gt_norm = np.zeros(act_gt[first_frames::].shape)
-if remove_initial_frames is False:
+if remove_initial_frames is False:            # For example, if at the beginning of the experiment with DMD, there was room light affecting the acquisition
     # act_gt_norm = tNMF.norm_dimension(act_gt, dim = 1, mode='0to1') #normalization by the maximum
     matrix= act_gt[first_frames::]
     for idx in range(0,act_gt.shape[1]):
@@ -169,7 +169,7 @@ video = np.moveaxis(video,0,2) #rearrange to px*px*time form
 print('Done!')
 print(' ')
 
-# OPTIONAL: removing one single frame from the dataset -- the raw data part
+# OPTIONAL: removing one single frame from the dataset -- the raw data part 
 if remove_single_frame is True:
     old_video = video;
     time_index_to_remove = frame_to_delete + numbeads +1;
@@ -193,7 +193,7 @@ print('Preprocessing the dataset...')
 typical_size = [x_pxls,y_pxls] 
 frame_size = np.asarray((typical_size), dtype = int)
 
-# Check orientation of the frame (vertical video or horizontal)
+# Check the orientation of the frame (vertical video or horizontal)
 if frame_size[0] > frame_size[1]:
     ORIENTATION = 'vertical'
 elif frame_size[0] < frame_size[1]:
@@ -234,7 +234,7 @@ print('Done!')
 print(' ')
 
 
-# [2.03]: Filter low frequency background (envelope)  ### This was used on fully eveolved speckles, it was not used for MMF patterns
+# [2.03]: Filter low-frequency background (envelope)  ### This was used on fully evolved speckles, it was not used for MMF patterns (demixed fiber photometry)
 video_highpass = np.zeros(video_binned.shape) # preallocate
 print('Checking if we will filter the envelope... ')     ### Multimode fiber patterns do not need to remove gaussian envelope
 if do_envelop_filtering == 1:
@@ -274,7 +274,7 @@ else:
     print('Envelope filtering was not applied. ') # typical case for multimode fiber fiber photometry demixing
 
 #%% ##################################################################################################### %%#
-#%% [3.00] Do NMF on the pre-processed video (croped,binned, and filtered)
+#%% [3.00] Do NMF on the pre-processed video (cropped,binned, and filtered)
 print('Starting the NMF...')
 #numbeads = act_gt.shape[1] #get real number of beads (from ground truth)
 initial_frames = numbeads + first_frames
@@ -322,13 +322,13 @@ model = NMF(n_components        = model_n_components,
             alpha_W             = model_alpha_W,
             alpha_H             = model_alpha_H)
 
-#Run the model, store spatial fingerprints in W:
+# Run the model, store spatial fingerprints in W:
 W = model.fit_transform(X)
-#Store temporal activities in H:
+# Store temporal activities in H:
 H = model.components_
-#Reshape spatial fingerprints in 3D tensor form:
+# Reshape spatial fingerprints in 3D tensor form:
 fingerprints = np.reshape(W, (new_frame_size[0], new_frame_size[1], rank))
-#Store ground truth fingerprints, for comparison later
+# Store ground truth fingerprints, for comparison later
 fingerprints_gt = video_highpass[:,:,0:numbeads]
 
 tNMF.show_Nimg(fingerprints_gt) #show ground truth fingerprints
@@ -490,7 +490,7 @@ plt.show()
 print('Temporal traces plotted...')
 
 #%% ##################################################################################################### %%#
-#%% [5.00]: Re-ordering the results withou any repetition (Special Descending order, SD-order)
+#%% [5.00]: Re-ordering the results without any repetition (Special Descending order, SD-order)
 ''' --------------------------------------------------------------------------------- '''
 
 ''' # SD Ordering/Sorting step: Explained Here! #
@@ -1043,11 +1043,11 @@ Adapted on Fri Feb 24 18:35:16 2023 (Caio)      - NMF_scattering_microendoscopy_
 Adapted on Wed Mar  8 10:26:56 2023 (Caio)      - NMF_scattering_microendoscopy_v13_20230308.py - plus, can remove initial temporal frames
 Adapted on Mon Mar 13 13:51:41 2023 (Caio)      - NMF_scattering_microendoscopy_v14_20230313.py - plus, manually chooses to normalize traces with max ou mean value
 Adapted on Wed Mar 15 11:06:29 2023 (Caio)      - NMF_scattering_microendoscopy_v15_20230315.py - plus, new temporal traces display
-Adapted on Thu Mar 16 10:33:08 2023 (Caio)      - NMF_scattering_microendoscopy_v16_20230316.py - plus, getting manually GT fingrinprints from continuous experiment
+Adapted on Thu Mar 16 10:33:08 2023 (Caio)      - NMF_scattering_microendoscopy_v16_20230316.py - plus, getting manually GT fingerprints from continuous experiment
 Adapted on Sat Mar 18 14:59:14 2023 (Caio)      - NMF_scattering_microendoscopy_v17_20230318.py - plus, compacting code through OOP - tools_caio.py (not completed)
 Adapted on Sun May 14 18:40:55 2023 (Caio)      - NMF_scattering_microendoscopy_v18_20230514.py - plus, extra optional plots in the end (individual fingerprints and traces)
 Adapted on Wed Oct 11 14:53:11 2023 (Caio)      - NMF_scattering_microendoscopy_v19_20231011.py - adapted for multiple sources (chatGPT suggestion)
 Adapted on Sat Oct 28 16:50:39 2023 (Caio)      - NMF_scattering_microendoscopy_v20_20231011.py - plus, possibility to remove a single frame from the raw data
-Adapted on Fri Jun  7 01:05:06 2024 (Caio)      - NMF_scattering_microendoscopy_v21_20240606.py - plus, add the possibility to chose to include a red trace in the worst trace or not
+Adapted on Fri Jun  7 01:05:06 2024 (Caio)      - NMF_scattering_microendoscopy_v21_20240606.py - plus, add the possibility to choose to include a red trace in the worst trace or not
 Adapted on Fri Jun 14 23:26:34 2024 (Caio)      - NMF_demixing__ProofOfPrinciple_v22_20240614.py - Code to share (Commented and organized)
 '''
